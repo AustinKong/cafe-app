@@ -1,4 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { PrismaClient } from '@cafe-app/db';
 
 const prisma = new PrismaClient();
 
