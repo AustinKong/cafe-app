@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const getAllCafes = async () => {
-  return await prisma.cafe.findMany({
+export function getAllCafes() {
+  return prisma.cafe.findMany({
     include: {
       _count: {
         select: {
@@ -18,10 +18,10 @@ export const getAllCafes = async () => {
       }
     }
   });
-};
+}
 
-export const getCafeByLocation = async (location: string) => {
-  return await prisma.cafe.findMany({
+export function getCafeByLocation(location: string) {
+  return prisma.cafe.findMany({
     where: {
       location
     },
@@ -39,33 +39,33 @@ export const getCafeByLocation = async (location: string) => {
       }
     }
   });
-};
+}
 
-export const createCafe = async (data: {
+export function createCafe(data: {
   name: string;
   description: string;
   location: string;
   logo?: string;
-}) => {
-  return await prisma.cafe.create({
+}) {
+  return prisma.cafe.create({
     data
   });
-};
+}
 
-export const updateCafe = async (id: string, data: {
+export function updateCafe(id: string, data: {
   name?: string;
   description?: string;
   location?: string;
   logo?: string;
-}) => {
-  return await prisma.cafe.update({
+}) {
+  return prisma.cafe.update({
     where: { id },
     data
   });
-};
+}
 
-export const deleteCafe = async (id: string) => {
-  return await prisma.cafe.delete({
+export function deleteCafe(id: string) {
+  return prisma.cafe.delete({
     where: { id }
   });
-};
+}

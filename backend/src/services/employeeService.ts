@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const getAllEmployees = async () => {
-  return await prisma.employee.findMany({
+export function getAllEmployees() {
+  return prisma.employee.findMany({
     include: {
       cafe: true
     },
@@ -11,12 +11,14 @@ export const getAllEmployees = async () => {
       startDate: 'asc'
     }
   });
-};
+}
 
-export const getEmployeesByCafe = async (cafeId: string) => {
-  return await prisma.employee.findMany({
+export function getEmployeesByCafeName(cafeName: string) {
+  return prisma.employee.findMany({
     where: {
-      cafeId
+      cafe: {
+        name: cafeName
+      }
     },
     include: {
       cafe: true
@@ -25,9 +27,9 @@ export const getEmployeesByCafe = async (cafeId: string) => {
       startDate: 'asc'
     }
   });
-};
+}
 
-export const createEmployee = async (data: {
+export function createEmployee(data: {
   id: string;
   name: string;
   emailAddress: string;
@@ -35,34 +37,34 @@ export const createEmployee = async (data: {
   gender: 'Male' | 'Female';
   startDate: Date;
   cafeId: string;
-}) => {
-  return await prisma.employee.create({
+}) {
+  return prisma.employee.create({
     data,
     include: {
       cafe: true
     }
   });
-};
+}
 
-export const updateEmployee = async (id: string, data: {
+export function updateEmployee(id: string, data: {
   name?: string;
   emailAddress?: string;
   phoneNumber?: string;
   gender?: 'Male' | 'Female';
   startDate?: Date;
   cafeId?: string;
-}) => {
-  return await prisma.employee.update({
+}) {
+  return prisma.employee.update({
     where: { id },
     data,
     include: {
       cafe: true
     }
   });
-};
+}
 
-export const deleteEmployee = async (id: string) => {
-  return await prisma.employee.delete({
+export function deleteEmployee(id: string) {
+  return prisma.employee.delete({
     where: { id }
   });
-};
+}
