@@ -1,13 +1,11 @@
-import { Typography } from 'antd'
-
-const { Title } = Typography
+import { Routes } from 'react-router-dom';
 
 function App() {
 
   return (
-    <>
-      <Title>Hello world</Title>
-    </>
+    <Routes>
+
+    </Routes>
   );
 }
 
