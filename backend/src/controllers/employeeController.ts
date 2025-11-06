@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService } from "../services/employeeService";
-import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema } from "../validators/employeeValidator";
+import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema } from "@cafe-app/shared-types"
 
 const MS_DAY = 1000 * 60 * 60 * 24;
 

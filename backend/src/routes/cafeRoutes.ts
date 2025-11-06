@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateRequest } from '../middleware/validateRequest';
-import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from '../validators/cafeValidator';
+import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from "@cafe-app/shared-types"
 import { getCafes, createCafe, updateCafe, deleteCafe } from '../controllers/cafeController';
 import asyncHandler from '../utils/asyncHandler';
 

@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllCafes, getCafeByLocation, createCafe as createCafeService, updateCafe as updateCafeService, deleteCafe as deleteCafeService } from "../services/cafeService";
-import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from "../validators/cafeValidator";
+import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from "@cafe-app/shared-types"
 
 export async function getCafes(req: Request, res: Response) {
   const { query } = extractTypedLocals(res, getCafesSchema);
