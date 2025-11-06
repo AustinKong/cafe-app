@@ -20,7 +20,7 @@ model Employee {
   gender       Gender
   startDate    DateTime? @map("start_date")
   cafeId       String    @map("cafe_id")
-  cafe         Cafe      @relation(fields: [cafeId], references: [id])
+  cafe         Cafe      @relation(fields: [cafeId], references: [id], onDelete: Cascade)
 
   @@map("employees")
 }
