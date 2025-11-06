@@ -1,6 +1,6 @@
 import type {
   GetCafesQuery,
-  CafeListItem
+  CafeListItem,
 } from '@cafe-app/shared-types';
 
 const BASE_URL = 'http://localhost:5000/api';
@@ -19,4 +19,14 @@ export async function fetchCafes(query: GetCafesQuery): Promise<CafeListItem[]> 
 
   const data = await response.json() as CafeListItem[];
   return data;
+}
+
+export async function deleteCafe(id: string): Promise<void> {
+  const response = await fetch(`${BASE_URL}/cafes/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete cafe');
+  }
 }

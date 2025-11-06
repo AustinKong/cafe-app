@@ -7,7 +7,7 @@ import { ConfigProvider } from "antd";
 
 import App from "./App.tsx";
 import 'antd/dist/reset.css';
-import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

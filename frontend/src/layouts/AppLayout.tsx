@@ -6,7 +6,7 @@ export function AppLayout() {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header>
-        <Menu theme="dark" mode="horizontal" />
+        <Menu theme="dark" mode="horizontal" items={[]} />
       </Header>
 
       <Content style={{ padding: '24px' }}>
