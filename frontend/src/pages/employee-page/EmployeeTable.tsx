@@ -18,9 +18,9 @@ export function EmployeeTable({
   const [colDefs] = useState<ColDef<EmployeeListItem>[]>([
     { headerName: 'ID', field: 'id' },
     { headerName: 'Name', field: 'name', flex: 1 },
-    { headerName: 'Email', field: 'email_address', flex: 1 },
-    { headerName: 'Phone', field: 'phone_number', flex: 1 },
-    { headerName: 'Days Worked', field: 'days_worked', flex: 1 },
+    { headerName: 'Email', field: 'emailAddress', flex: 1 },
+    { headerName: 'Phone', field: 'phoneNumber', flex: 1 },
+    { headerName: 'Days Worked', field: 'daysWorked', flex: 1 },
     { headerName: 'Café', field: 'cafe', flex: 1 },
     {
       headerName: 'Actions',

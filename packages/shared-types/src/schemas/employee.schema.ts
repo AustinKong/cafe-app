@@ -25,10 +25,7 @@ export const getEmployeeSchema = {
 }
 
 export const createEmployeeSchema = {
-  body: z.object({
-    id: ID_VALIDATOR,
-    ...EMPLOYEE_BODY_VALIDATOR.shape
-  })
+  body: EMPLOYEE_BODY_VALIDATOR
 }
 
 export const updateEmployeeSchema = {

@@ -10,8 +10,8 @@ export interface CafeListItem {
 export interface EmployeeListItem {
   id: string;
   name: string;
-  email_address: string;
-  phone_number: string;
-  days_worked: number;
+  emailAddress: string;
+  phoneNumber: string;
+  daysWorked: number;
   cafe: string;
 }

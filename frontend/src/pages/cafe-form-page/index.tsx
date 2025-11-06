@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { type CafeListItem, type CreateCafeDto } from "@cafe-app/shared-types";
-import { Button, Flex, Form, Input, message, Popconfirm, Typography, Upload, type UploadFile, type UploadProps } from "antd";
+import { type Cafe, type CreateCafeDto } from "@cafe-app/shared-types";
+import { Button, Flex, Form, Input, message, Popconfirm, Spin, Typography, Upload, type UploadFile, type UploadProps } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCafe, fetchCafeById, updateCafe } from "../../services/cafeService";
 import { useNavigate, useParams } from "react-router-dom";
@@ -42,7 +42,7 @@ export function CafeFormPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  const { data: cafe, isLoading } = useQuery<CafeListItem>({
+  const { data: cafe, isLoading } = useQuery<Cafe>({
     queryKey: ["cafes", id],
     queryFn: () => fetchCafeById(id ?? ""),
     enabled: isEdit,
@@ -121,6 +121,10 @@ export function CafeFormPage() {
     }
   }
 
+  if (isLoading) {
+    return <Spin />
+  }
+
   return (
     <div style={{ maxWidth: 800, margin: "auto" }}>
       <Title level={2}>{isEdit ? "Edit Cafe" : "Add New Cafe"}</Title>
@@ -167,7 +171,7 @@ export function CafeFormPage() {
 
         <Flex style={{ justifyContent: "space-between" }}>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={isPending} disabled={isLoading}>
+            <Button type="primary" htmlType="submit" loading={isPending}>
               {isEdit ? "Update Cafe" : "Create Cafe"}
             </Button>
           </Form.Item>

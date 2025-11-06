@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService, getEmployeeById as getEmployeeByIdService } from "../services/employeeService";
-import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, getEmployeeSchema, EmployeeListItem } from "@cafe-app/shared-types"
+import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, getEmployeeSchema, EmployeeListItem, Employee } from "@cafe-app/shared-types"
 import ApiError from "../utils/apiError";
 
 const MS_DAY = 1000 * 60 * 60 * 24;
@@ -22,11 +22,8 @@ export async function getEmployees(req: Request, res: Response) {
     const daysWorked = Math.floor((now.getTime() - startDate.getTime()) / MS_DAY);
 
     return {
-      id: employee.id,
-      name: employee.name,
-      email_address: employee.emailAddress,
-      phone_number: employee.phoneNumber,
-      days_worked: daysWorked,
+      ...employee,
+      daysWorked,
       cafe: employee.cafe.name,
     };
   });
@@ -59,7 +56,7 @@ export async function getEmployeeById(req: Request, res: Response) {
     phoneNumber: employee.phoneNumber,
     gender: employee.gender,
     startDate: employee.startDate,
-    cafe: employee.cafe.name
+    cafeId: employee.cafe.id
   });
 };
 
