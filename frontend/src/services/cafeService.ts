@@ -7,12 +7,12 @@ import type {
 const BASE_URL = 'http://localhost:5000/api';
 
 export async function fetchCafes(query: GetCafesQuery): Promise<CafeListItem[]> {
-  const params = new URLSearchParams();
+  const url = new URL(`${BASE_URL}/cafes`);
   if (query.location) {
-    params.append('location', query.location);
+    url.searchParams.append('location', query.location);
   }
 
-  const response = await fetch(`${BASE_URL}/cafes?${params.toString()}`);
+  const response = await fetch(url.toString());
   
   if (!response.ok) {
     throw new Error('Failed to fetch cafes');
