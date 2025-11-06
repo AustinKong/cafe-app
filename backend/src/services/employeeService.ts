@@ -30,7 +30,6 @@ export function getEmployeesByCafeName(cafeName: string) {
 }
 
 export function createEmployee(data: {
-  id: string;
   name: string;
   emailAddress: string;
   phoneNumber: string;
@@ -38,8 +37,11 @@ export function createEmployee(data: {
   startDate: Date;
   cafeId: string;
 }) {
+  const id = `UI${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+  const dataWithId = { ...data, id };
+
   return prisma.employee.create({
-    data,
+    data: dataWithId,
     include: {
       cafe: true
     }
@@ -66,5 +68,14 @@ export function updateEmployee(id: string, data: {
 export function deleteEmployee(id: string) {
   return prisma.employee.delete({
     where: { id }
+  });
+}
+
+export function getEmployeeById(id: string) {
+  return prisma.employee.findUnique({
+    where: { id },
+    include: {
+      cafe: true
+    }
   });
 }
