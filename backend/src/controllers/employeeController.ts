@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService } from "../services/employeeService";
-import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema } from "@cafe-app/shared-types"
+import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, EmployeeListItem } from "@cafe-app/shared-types"
 
 const MS_DAY = 1000 * 60 * 60 * 24;
 
@@ -16,7 +16,7 @@ export async function getEmployees(req: Request, res: Response) {
   }
 
   const now = new Date();
-  const response = employees.map((employee) => {
+  const response: EmployeeListItem[] = employees.map((employee) => {
     const startDate = new Date(employee.startDate);
     const daysWorked = Math.floor((now.getTime() - startDate.getTime()) / MS_DAY);
 

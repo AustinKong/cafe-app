@@ -7,5 +7,11 @@
     "backend",
     "frontend",
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"bgBlue,bgGreen\" \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\""
+  }
 }

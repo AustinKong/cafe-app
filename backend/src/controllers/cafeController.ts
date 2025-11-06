@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllCafes, getCafeByLocation, createCafe as createCafeService, updateCafe as updateCafeService, deleteCafe as deleteCafeService } from "../services/cafeService";
-import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from "@cafe-app/shared-types"
+import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema, CafeListItem } from "@cafe-app/shared-types"
 
 export async function getCafes(req: Request, res: Response) {
   const { query } = extractTypedLocals(res, getCafesSchema);
@@ -13,7 +13,7 @@ export async function getCafes(req: Request, res: Response) {
     cafes = await getAllCafes();
   }
 
-  const response = cafes.map((cafe) => ({
+  const response: CafeListItem[] = cafes.map((cafe) => ({
     id: cafe.id,
     name: cafe.name,
     description: cafe.description,

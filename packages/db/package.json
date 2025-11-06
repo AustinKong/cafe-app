@@ -4,10 +4,13 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "db:seed": "npx prisma generate && npx tsx prisma/seed.ts"
   },
   "devDependencies": {
     "@prisma/client": "^6.19.0",
-    "prisma": "^6.19.0"
+    "dotenv": "^17.2.3",
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.6"
   }
 }
