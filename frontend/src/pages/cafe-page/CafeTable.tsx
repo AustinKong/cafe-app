@@ -69,6 +69,7 @@ export function CafeTable({
               onConfirm={() => { deleteCafe(cafeId); }}
               okText="Yes"
               cancelText="No"
+              placement="left"
             >
               <Button 
                 type="text" 

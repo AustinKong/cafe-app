@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { type CafeListItem, type CreateCafeDto } from "@cafe-app/shared-types";
-import { Button, Flex, Form, Input, message, Typography, Upload, type UploadFile, type UploadProps } from "antd";
-import { useMutation, useQuery, useQueryClient, type UseQueryResult } from "@tanstack/react-query";
+import { Button, Flex, Form, Input, message, Popconfirm, Typography, Upload, type UploadFile, type UploadProps } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCafe, fetchCafeById, updateCafe } from "../../services/cafeService";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
@@ -11,9 +15,12 @@ const { Title } = Typography;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
 const MAX_FILE_SIZE_MB = 2;
 
-function normFile(e: any): UploadFile[] {
+function normFile(e: unknown): UploadFile[] {
   if (Array.isArray(e)) return e;
-  return e?.fileList ?? [];
+  if (e && typeof e === "object" && "fileList" in e) {
+    return (e as { fileList: UploadFile[] }).fileList;
+  }
+  return [];
 }
 
 function toFileListFromUrl(url: string | null | undefined): UploadFile[] {
@@ -35,7 +42,7 @@ export function CafeFormPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  const { data: cafe, isLoading }: UseQueryResult<CafeListItem, Error> = useQuery<CafeListItem, Error>({
+  const { data: cafe, isLoading } = useQuery<CafeListItem>({
     queryKey: ["cafes", id],
     queryFn: () => fetchCafeById(id ?? ""),
     enabled: isEdit,
@@ -51,6 +58,7 @@ export function CafeFormPage() {
         location: cafe.location,
         logo: initialLogo,
       });
+      form.resetFields();
     } else if (!isEdit) {
       form.setFieldsValue({ logo: [] });
     }
@@ -71,7 +79,6 @@ export function CafeFormPage() {
   const handleFinish = (values: CreateCafeDto & { logo?: UploadFile[] }) => {
     const file = values.logo?.[0]?.originFileObj as File | undefined;
 
-    // (Optional) belt-and-braces validation
     if (file) {
       if (!ALLOWED_TYPES.includes(file.type)) {
         message.error("Only JPG/PNG files are allowed.");
@@ -83,7 +90,6 @@ export function CafeFormPage() {
       }
     }
 
-    // Pass the real File to your existing service
     saveCafe({ name: values.name, description: values.description, location: values.location, logo: file });
   };
 
@@ -105,18 +111,28 @@ export function CafeFormPage() {
     },
   };
 
+  const [cancelConfirmOpen, setCancelConfirmOpen] =  useState(false);
+
+  const handleCancelClick = () => {
+    if (form.isFieldsTouched()) {
+      setCancelConfirmOpen(true);
+    } else {
+      void navigate("/cafes");
+    }
+  }
+
   return (
     <div style={{ maxWidth: 800, margin: "auto" }}>
       <Title level={2}>{isEdit ? "Edit Cafe" : "Add New Cafe"}</Title>
 
-      <Form form={form} layout="vertical" onFinish={handleFinish} initialValues={{ logo: [] }}>
+      <Form form={form} layout="vertical" onFinish={handleFinish} initialValues={{ ...cafe, logo: initialLogo }}>
         <Form.Item
           label="Name"
           name="name"
           rules={[
             { required: true, message: "Please enter the cafe name" },
-            { min: 2, message: "Name must be at least 2 characters" },
-            { max: 100, message: "Name cannot exceed 100 characters" },
+            { min: 6, message: "Name must be at least 6 characters" },
+            { max: 10, message: "Name cannot exceed 10 characters" },
           ]}
         >
           <Input />
@@ -137,7 +153,6 @@ export function CafeFormPage() {
           <Input />
         </Form.Item>
 
-        {/* Crucial wiring: fileList + normFile */}
         <Form.Item
           label="Logo"
           name="logo"
@@ -156,9 +171,17 @@ export function CafeFormPage() {
               {isEdit ? "Update Cafe" : "Create Cafe"}
             </Button>
           </Form.Item>
-          <Link to="/cafes">
-            <Button>Cancel</Button>
-          </Link>
+          <Popconfirm
+            title="Are you sure you want to cancel?"
+            description="Unsaved changes will be lost."
+            onConfirm={() => { void navigate("/cafes"); }}
+            okText="Yes"
+            cancelText="No"
+            open={cancelConfirmOpen}
+            onCancel={() => { setCancelConfirmOpen(false) }}
+          >
+            <Button onClick={handleCancelClick}>Cancel</Button>
+          </Popconfirm>
         </Flex>
       </Form>
     </div>
