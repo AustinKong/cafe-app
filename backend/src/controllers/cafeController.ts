@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
-import { getAllCafes, getCafeByLocation } from "../services/cafeService";
-import { getCafesSchema } from "../validators/cafeValidator";
+import { getAllCafes, getCafeByLocation, createCafe as createCafeService, updateCafe as updateCafeService, deleteCafe as deleteCafeService } from "../services/cafeService";
+import { getCafesSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema } from "../validators/cafeValidator";
 
 export async function getCafes(req: Request, res: Response) {
   const { query } = extractTypedLocals(res, getCafesSchema);
@@ -23,4 +23,30 @@ export async function getCafes(req: Request, res: Response) {
   }));
 
   return res.json(response);
+};
+
+export async function createCafe(req: Request, res: Response) {
+  const { body } = extractTypedLocals(res, createCafeSchema);
+
+  const newCafe = await createCafeService(body);
+
+  return res.status(201).json(newCafe);
+};
+
+export async function updateCafe(req: Request, res: Response) {
+  const { params, body } = extractTypedLocals(res, updateCafeSchema);
+  const { id } = params;
+
+  const updatedCafe = await updateCafeService(id, body);
+
+  return res.json(updatedCafe);
+};
+
+export async function deleteCafe(req: Request, res: Response) {
+  const { params } = extractTypedLocals(res, deleteCafeSchema);
+  const { id } = params;
+
+  await deleteCafeService(id);
+
+  return res.status(204).send();
 };
