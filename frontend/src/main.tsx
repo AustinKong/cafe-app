@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 
 import App from "./App.tsx";
+import 'antd/dist/reset.css';
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");
