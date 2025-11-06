@@ -12,6 +12,12 @@ export const getCafesSchema = {
   })
 }
 
+export const getCafeSchema = {
+  params: z.object({
+    id: z.uuid(),
+  })
+};
+
 export const createCafeSchema = {
   body: CAFE_BODY_VALIDATOR
 }

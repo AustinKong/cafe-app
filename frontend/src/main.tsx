@@ -9,6 +9,7 @@ import App from "./App.tsx";
 import 'antd/dist/reset.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const rootElement = document.getElementById("root");

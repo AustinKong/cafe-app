@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 
 import { Button, Input, Space, Typography } from 'antd';
 import {
@@ -76,9 +76,11 @@ export function CafePage() {
             Search
           </Button>
         </Space.Compact>
-        <Button type="primary" icon={<PlusOutlined />}>
-          Add Cafe
-        </Button>
+        <Link to="/cafes/new">
+          <Button type="primary" icon={<PlusOutlined />}>
+            Add Cafe
+          </Button>
+        </Link>
       </Space>
       <CafeTable cafes={cafes ?? []} isLoading={isLoading || isDeleting} deleteCafe={deleteCafe} />
     </Space>

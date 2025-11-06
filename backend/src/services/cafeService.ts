@@ -20,6 +20,22 @@ export function getAllCafes() {
   });
 }
 
+export function getCafeById(id: string) {
+  return prisma.cafe.findUnique({
+    where: {
+      id
+    },
+    include: {
+      _count: {
+        select: {
+          employees: true
+        }
+      },
+      employees: true
+    }
+  });
+}
+
 export function getCafeByLocation(location: string) {
   return prisma.cafe.findMany({
     where: {

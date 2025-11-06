@@ -3,8 +3,8 @@ import { type ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import type { CafeListItem } from "@cafe-app/shared-types";
 import { Link } from "react-router-dom";
-import { Button, Popconfirm } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Image, Flex } from "antd";
+import { DeleteOutlined, EditOutlined, QuestionOutlined } from "@ant-design/icons";
 
 export function CafeTable({
   cafes,
@@ -16,7 +16,20 @@ export function CafeTable({
   deleteCafe: (id: string) => void;
 }) {
   const [colDefs] = useState<ColDef<CafeListItem>[]>([
-    { headerName: "Logo", field: "logo", width: 80 },
+    { headerName: "Logo", field: "logo", width: 140,
+      cellRenderer: (params: { value: string; }) => {
+        const logoUrl = params.value;
+        return logoUrl ? (
+          <Image src={logoUrl} />
+        ) : (
+          <Flex justify="center" align="center" style={{ height: "100%" }}>
+            <QuestionOutlined />
+          </Flex>
+        );
+      },
+      sortable: false,
+      filter: false,
+     },
     { headerName: "Name", field: "name" },
     {
       headerName: "Description",
@@ -43,7 +56,7 @@ export function CafeTable({
         const cafeId = params.data.id;
         return (
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <Link to={`/cafes/edit/${cafeId}`}>
+            <Link to={`/cafes/${cafeId}/edit`}>
               <Button 
                 type="text" 
                 icon={<EditOutlined />} 
@@ -66,7 +79,10 @@ export function CafeTable({
             </Popconfirm>
           </div>
         );
-      }
+      },
+      sortable: false,
+      filter: false,
+      width: 100
     },
   ]);
   return (
