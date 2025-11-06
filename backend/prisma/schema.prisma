@@ -13,14 +13,14 @@ enum Gender {
 }
 
 model Employee {
-  id           String    @id @unique
+  id           String   @id @unique
   name         String
-  emailAddress String    @unique @map("email_address")
-  phoneNumber  String    @map("phone_number")
+  emailAddress String   @unique @map("email_address")
+  phoneNumber  String   @map("phone_number")
   gender       Gender
-  startDate    DateTime? @map("start_date")
-  cafeId       String    @map("cafe_id")
-  cafe         Cafe      @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  startDate    DateTime @map("start_date")
+  cafeId       String   @map("cafe_id")
+  cafe         Cafe     @relation(fields: [cafeId], references: [id], onDelete: Cascade)
 
   @@map("employees")
 }
