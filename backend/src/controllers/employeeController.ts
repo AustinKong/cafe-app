@@ -1,6 +1,7 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
-import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService } from "../services/employeeService";
-import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, EmployeeListItem } from "@cafe-app/shared-types"
+import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService, getEmployeeById as getEmployeeByIdService } from "../services/employeeService";
+import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, getEmployeeSchema, EmployeeListItem } from "@cafe-app/shared-types"
+import ApiError from "../utils/apiError";
 
 const MS_DAY = 1000 * 60 * 60 * 24;
 
@@ -26,7 +27,7 @@ export async function getEmployees(req: Request, res: Response) {
       email_address: employee.emailAddress,
       phone_number: employee.phoneNumber,
       days_worked: daysWorked,
-      cafe: employee.cafe?.name || '',
+      cafe: employee.cafe.name,
     };
   });
 
@@ -39,6 +40,27 @@ export async function createEmployee(req: Request, res: Response) {
   const newEmployee = await createEmployeeService(body);
 
   return res.status(201).json(newEmployee);
+};
+
+export async function getEmployeeById(req: Request, res: Response) {
+  const { params } = extractTypedLocals(res, getEmployeeSchema);
+  const { id } = params;
+
+  const employee = await getEmployeeByIdService(id);
+
+  if (!employee) {
+    throw new ApiError(404, "Employee not found");
+  }
+
+  return res.json({
+    id: employee.id,
+    name: employee.name,
+    emailAddress: employee.emailAddress,
+    phoneNumber: employee.phoneNumber,
+    gender: employee.gender,
+    startDate: employee.startDate,
+    cafe: employee.cafe.name
+  });
 };
 
 export async function updateEmployee(req: Request, res: Response) {

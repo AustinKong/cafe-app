@@ -68,3 +68,12 @@ export function deleteEmployee(id: string) {
     where: { id }
   });
 }
+
+export function getEmployeeById(id: string) {
+  return prisma.employee.findUnique({
+    where: { id },
+    include: {
+      cafe: true
+    }
+  });
+}
