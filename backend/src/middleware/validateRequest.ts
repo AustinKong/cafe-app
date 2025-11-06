@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction, RequestHandler } from "express";
+import type { Request as ExpressRequest, Response as ExpressResponse, NextFunction, RequestHandler } from "express";
 import { z } from "zod";
 import ApiError from "../utils/apiError";
 
@@ -120,3 +120,9 @@ export function extractTypedLocals<const S extends ValidatorSchema>(
 ): ValidatedOf<S> {
   return res.locals as ValidatedOf<S>;
 }
+
+export type Response = ExpressResponse & {
+  locals: Record<string, unknown>;
+}
+
+export type Request = ExpressRequest;
