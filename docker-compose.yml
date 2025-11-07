@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://cafeuser:cafepass@postgres:5432/cafedb
+      - FRONTEND_URL=http://localhost:5173
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend/data:/app/backend/data
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=cafedb
+      - POSTGRES_USER=cafeuser
+      - POSTGRES_PASSWORD=cafepass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

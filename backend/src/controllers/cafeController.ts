@@ -4,7 +4,7 @@ import { getCafesSchema, getCafeSchema, createCafeSchema, updateCafeSchema, dele
 import ApiError from "../utils/apiError";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
+const getBaseUrl = (req: Request) => `${req.protocol}://${req.get('host')}`;
 
 export async function getCafes(req: Request, res: Response) {
   try {
@@ -76,7 +76,7 @@ export async function createCafe(req: Request, res: Response) {
   try {
     const { body } = extractTypedLocals(res, createCafeSchema);
 
-    const logoPath = (req as any).file ? `${BASE_URL}/data/${(req as any).file.filename}` : undefined;
+    const logoPath = (req as any).file ? `${getBaseUrl(req)}/data/${(req as any).file.filename}` : undefined;
 
     const newCafe = await createCafeService({ ...body, logo: logoPath });
 
@@ -110,7 +110,7 @@ export async function updateCafe(req: Request, res: Response) {
     const { params, body } = extractTypedLocals(res, updateCafeSchema);
     const { id } = params;
 
-    const logoPath = (req as any).file ? `${BASE_URL}/data/${(req as any).file.filename}` : undefined;
+    const logoPath = (req as any).file ? `${getBaseUrl(req)}/data/${(req as any).file.filename}` : undefined;
 
     const updatedCafe = await updateCafeService(id, { ...body, logo: logoPath });
 

@@ -9,7 +9,8 @@
     "packages/*"
   ],
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3"
   },
   "scripts": {
     "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"bgBlue,bgGreen\" \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\""

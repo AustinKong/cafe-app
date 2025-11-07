@@ -1,11 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { PrismaClient } from '@cafe-app/db';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  if (await prisma.cafe.count() > 0) {
+    console.log('Database already seeded. Skipping seeding process.');
+    return;
+  }
+
   const cafes = await Promise.all([
     prisma.cafe.create({
       data: {

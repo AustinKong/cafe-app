@@ -1,9 +1,9 @@
 import type { CreateEmployeeRequestBody, GetEmployeesRequestQuery, GetEmployeesResponse, GetEmployeeResponse, CreateEmployeeResponse, UpdateEmployeeResponse } from '@cafe-app/shared-types';
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = '/api';
 
 export async function fetchEmployees(query: GetEmployeesRequestQuery): Promise<GetEmployeesResponse> {
-  const url = new URL(`${BASE_URL}/employees`);
+  const url = new URL(`${BASE_URL}/employees`, window.location.origin);
   if (query.cafe) {
     url.searchParams.append('cafe', query.cafe);
   }
