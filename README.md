@@ -21,7 +21,14 @@ A full-stack application for managing cafes and their employees. Built with Reac
    npm install
    ```
 
-   This will install dependencies for the root workspace and all sub-workspaces (backend, frontend, packages/shared-types).
+   
+3. Build shared types:
+   ```bash
+   cd packages/shared-types
+   npm run build
+   ```
+
+   This will install and build dependencies for the root workspace and all sub-workspaces (backend, frontend, packages/shared-types).
 
 ## Environment Setup
 
