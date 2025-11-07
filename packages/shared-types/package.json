@@ -8,7 +8,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@cafe-app/db": "^1.0.0",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
