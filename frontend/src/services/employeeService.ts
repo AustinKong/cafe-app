@@ -1,8 +1,8 @@
-import type { CreateEmployeeDto, Employee, EmployeeListItem, GetEmployeesQuery } from '@cafe-app/shared-types';
+import type { CreateEmployeeRequestBody, GetEmployeesRequestQuery, GetEmployeesResponse, GetEmployeeResponse, CreateEmployeeResponse, UpdateEmployeeResponse } from '@cafe-app/shared-types';
 
 const BASE_URL = 'http://localhost:5000/api';
 
-export async function fetchEmployees(query: GetEmployeesQuery): Promise<EmployeeListItem[]> {
+export async function fetchEmployees(query: GetEmployeesRequestQuery): Promise<GetEmployeesResponse> {
   const url = new URL(`${BASE_URL}/employees`);
   if (query.cafe) {
     url.searchParams.append('cafe', query.cafe);
@@ -14,7 +14,7 @@ export async function fetchEmployees(query: GetEmployeesQuery): Promise<Employee
     throw new Error('Failed to fetch employees');
   }
 
-  return response.json() as Promise<EmployeeListItem[]>;
+  return response.json() as Promise<GetEmployeesResponse>;
 }
 
 export async function deleteEmployee(id: string): Promise<void> {
@@ -27,17 +27,17 @@ export async function deleteEmployee(id: string): Promise<void> {
   }
 }
 
-export async function fetchEmployeeById(id: string): Promise<Employee> {
+export async function fetchEmployeeById(id: string): Promise<GetEmployeeResponse> {
   const response = await fetch(`${BASE_URL}/employees/${id}`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch employee');
   }
 
-  return response.json() as Promise<Employee>;
+  return response.json() as Promise<GetEmployeeResponse>;
 }
 
-export async function createEmployee(employee: CreateEmployeeDto): Promise<Employee> {
+export async function createEmployee(employee: CreateEmployeeRequestBody): Promise<CreateEmployeeResponse> {
   const response = await fetch(`${BASE_URL}/employees`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -48,10 +48,10 @@ export async function createEmployee(employee: CreateEmployeeDto): Promise<Emplo
     throw new Error('Failed to create employee');
   }
 
-  return response.json() as Promise<Employee>;
+  return response.json() as Promise<CreateEmployeeResponse>;
 }
 
-export async function updateEmployee(id: string, employee: CreateEmployeeDto): Promise<Employee> {
+export async function updateEmployee(id: string, employee: CreateEmployeeRequestBody): Promise<UpdateEmployeeResponse> {
   const response = await fetch(`${BASE_URL}/employees/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -62,5 +62,5 @@ export async function updateEmployee(id: string, employee: CreateEmployeeDto): P
     throw new Error('Failed to update employee');
   }
 
-  return response.json() as Promise<Employee>;
+  return response.json() as Promise<UpdateEmployeeResponse>;
 }

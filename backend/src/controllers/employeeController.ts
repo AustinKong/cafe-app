@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllEmployees, getEmployeesByCafeName, createEmployee as createEmployeeService, updateEmployee as updateEmployeeService, deleteEmployee as deleteEmployeeService, getEmployeeById as getEmployeeByIdService } from "../services/employeeService";
-import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, getEmployeeSchema, EmployeeListItem, Employee } from "@cafe-app/shared-types"
+import { getEmployeesSchema, createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema, getEmployeeSchema, GetEmployeesResponse, GetEmployeeResponse, CreateEmployeeResponse, UpdateEmployeeResponse } from "@cafe-app/shared-types"
 import ApiError from "../utils/apiError";
 
 const MS_DAY = 1000 * 60 * 60 * 24;
@@ -17,7 +17,7 @@ export async function getEmployees(req: Request, res: Response) {
   }
 
   const now = new Date();
-  const response: EmployeeListItem[] = employees.map((employee) => {
+  const response: GetEmployeesResponse = employees.map((employee) => {
     const startDate = new Date(employee.startDate);
     const daysWorked = Math.floor((now.getTime() - startDate.getTime()) / MS_DAY);
 
@@ -36,7 +36,17 @@ export async function createEmployee(req: Request, res: Response) {
 
   const newEmployee = await createEmployeeService(body);
 
-  return res.status(201).json(newEmployee);
+  const response: CreateEmployeeResponse = {
+    id: newEmployee.id,
+    name: newEmployee.name,
+    emailAddress: newEmployee.emailAddress,
+    phoneNumber: newEmployee.phoneNumber,
+    gender: newEmployee.gender,
+    startDate: newEmployee.startDate.toISOString(),
+    cafeId: newEmployee.cafeId
+  };
+
+  return res.status(201).json(response);
 };
 
 export async function getEmployeeById(req: Request, res: Response) {
@@ -49,15 +59,17 @@ export async function getEmployeeById(req: Request, res: Response) {
     throw new ApiError(404, "Employee not found");
   }
 
-  return res.json({
+  const response: GetEmployeeResponse = {
     id: employee.id,
     name: employee.name,
     emailAddress: employee.emailAddress,
     phoneNumber: employee.phoneNumber,
     gender: employee.gender,
-    startDate: employee.startDate,
+    startDate: employee.startDate.toISOString(),
     cafeId: employee.cafe.id
-  });
+  };
+
+  return res.json(response);
 };
 
 export async function updateEmployee(req: Request, res: Response) {
@@ -66,7 +78,17 @@ export async function updateEmployee(req: Request, res: Response) {
 
   const updatedEmployee = await updateEmployeeService(id, body);
 
-  return res.json(updatedEmployee);
+  const response: UpdateEmployeeResponse = {
+    id: updatedEmployee.id,
+    name: updatedEmployee.name,
+    emailAddress: updatedEmployee.emailAddress,
+    phoneNumber: updatedEmployee.phoneNumber,
+    gender: updatedEmployee.gender,
+    startDate: updatedEmployee.startDate.toISOString(),
+    cafeId: updatedEmployee.cafeId
+  };
+
+  return res.json(response);
 };
 
 export async function deleteEmployee(req: Request, res: Response) {

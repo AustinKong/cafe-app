@@ -1,6 +1,6 @@
 import { extractTypedLocals, Request, Response } from "../middleware/validateRequest";
 import { getAllCafes, getCafeByLocation, createCafe as createCafeService, updateCafe as updateCafeService, deleteCafe as deleteCafeService, getCafeById } from "../services/cafeService";
-import { getCafesSchema, getCafeSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema, CafeListItem } from "@cafe-app/shared-types"
+import { getCafesSchema, getCafeSchema, createCafeSchema, updateCafeSchema, deleteCafeSchema, GetCafesResponse, GetCafeResponse, CreateCafeResponse, UpdateCafeResponse } from "@cafe-app/shared-types"
 import ApiError from "../utils/apiError";
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
@@ -16,7 +16,7 @@ export async function getCafes(req: Request, res: Response) {
     cafes = await getAllCafes();
   }
 
-  const response: CafeListItem[] = cafes.map((cafe) => ({
+  const response: GetCafesResponse = cafes.map((cafe) => ({
     id: cafe.id,
     name: cafe.name,
     description: cafe.description,
@@ -38,7 +38,23 @@ export async function getCafe(req: Request, res: Response) {
     throw new ApiError(404, "Cafe not found");
   }
 
-  return res.json(cafe);
+  const response: GetCafeResponse = {
+    id: cafe.id,
+    name: cafe.name,
+    description: cafe.description,
+    logo: cafe.logo,
+    location: cafe.location,
+    employees: cafe.employees.map(employee => ({
+      id: employee.id,
+      name: employee.name,
+      emailAddress: employee.emailAddress,
+      phoneNumber: employee.phoneNumber,
+      gender: employee.gender,
+      startDate: employee.startDate.toISOString(),
+    }))
+  };
+
+  return res.json(response);
 };
 
 export async function createCafe(req: Request, res: Response) {
@@ -48,7 +64,23 @@ export async function createCafe(req: Request, res: Response) {
 
   const newCafe = await createCafeService({ ...body, logo: logoPath });
 
-  return res.status(201).json(newCafe);
+  const response: CreateCafeResponse = {
+    id: newCafe.id,
+    name: newCafe.name,
+    description: newCafe.description,
+    logo: newCafe.logo,
+    location: newCafe.location,
+    employees: (newCafe as any).employees.map((employee: any) => ({
+      id: employee.id,
+      name: employee.name,
+      emailAddress: employee.emailAddress,
+      phoneNumber: employee.phoneNumber,
+      gender: employee.gender,
+      startDate: employee.startDate.toISOString(),
+    }))
+  };
+
+  return res.status(201).json(response);
 };
 
 export async function updateCafe(req: Request, res: Response) {
@@ -59,7 +91,23 @@ export async function updateCafe(req: Request, res: Response) {
 
   const updatedCafe = await updateCafeService(id, { ...body, logo: logoPath });
 
-  return res.json(updatedCafe);
+  const response: UpdateCafeResponse = {
+    id: updatedCafe.id,
+    name: updatedCafe.name,
+    description: updatedCafe.description,
+    logo: updatedCafe.logo,
+    location: updatedCafe.location,
+    employees: (updatedCafe as any).employees.map((employee: any) => ({
+      id: employee.id,
+      name: employee.name,
+      emailAddress: employee.emailAddress,
+      phoneNumber: employee.phoneNumber,
+      gender: employee.gender,
+      startDate: employee.startDate.toISOString(),
+    }))
+  };
+
+  return res.json(response);
 };
 
 export async function deleteCafe(req: Request, res: Response) {
