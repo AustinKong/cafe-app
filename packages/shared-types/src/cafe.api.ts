@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 const CAFE_BODY_VALIDATOR = z.object({
-  name: z.string().min(2).max(100),
-  description: z.string().max(500),
+  name: z.string().min(6).max(10),
+  description: z.string().max(256),
   location: z.string().max(100),
 });
 

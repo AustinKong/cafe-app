@@ -143,7 +143,7 @@ export function CafeFormPage() {
           name="description"
           rules={[
             { required: true, message: "Please enter the cafe description" },
-            { max: 100, message: "Description cannot exceed 100 characters" },
+            { max: 256, message: "Description cannot exceed 256 characters" },
           ]}
         >
           <Input.TextArea rows={4} />

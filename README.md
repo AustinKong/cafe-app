@@ -91,3 +91,33 @@ This will start:
 - `backend/`: Express.js API server with Prisma ORM
 - `frontend/`: React application with Vite
 - `packages/shared-types/`: Shared TypeScript types and schemas
+
+## Architectural choices and explanations
+
+This project was implemented to satisfy the assessment requirements while keeping the codebase small, testable, and easy to understand. Below are notes about some of the design choices and why certain advanced patterns (CQRS, Mediator, Autofac) were not used here.
+
+### Why I didn't use CQRS and the Mediator pattern
+
+- CQRS and Mediator are useful when you have a complex domain with many read/write concerns, expensive queries, or when you need to scale read/write responsibilities separately. They also help centralise cross-cutting concerns via a mediator pipeline (logging, validation, retries, etc.).
+- This assessment's domain (cafes and employees) is relatively small and CRUD-focused. I chose a more conventional controller -> service pattern which:
+   - Keeps endpoints simple and explicit (controllers handle HTTP concerns, services contain business logic and DB access).
+   - Is easy to test: controllers and services can be unit-tested independently by passing mocks.
+   - Avoids adding extra layers and boilerplate which would increase complexity without delivering much benefit for this scope.
+
+### Why I didn't use Autofac
+
+- Autofac is a powerful DI container for .NET. This project is implemented in Node.js/TypeScript, so Autofac is not applicable.
+- For dependency injection in the Express/TypeScript ecosystem I used Inversify. Inversify:
+   - Provides decorator-based injection (`@injectable`, `@inject`) similar to Autofac's style.
+   - Works well with TypeScript `emitDecoratorMetadata` to resolve class-based dependencies.
+   - Keeps the container configuration explicit in `backend/src/container.ts`.
+
+### What I used instead (practical summary)
+
+- Layered controller -> service architecture:
+   - Controllers: handle request/response, validation errors, and mapping to DTOs.
+   - Services: implement business logic and Prisma DB access. Interfaces (`ICafeService`, `IEmployeeService`) make mocking and testing easier.
+- Dependency Injection: Inversify with a central `container.ts`. I bind interfaces to implementations and inject the Prisma client as a singleton.
+- Validation: Zod schemas (shared via `packages/shared-types`) are used for request validation with a `validateRequest` middleware. This keeps validation declarative and shared between frontend and backend types.
+- Prisma ORM: schema-driven database model with migrations and seeding. DB-level `onDelete: Cascade` ensures deleting a cafe removes related employees.
+- Routing pattern: I used explicit router factories (`createCafeRouter(controller)`) and pass controller instances in `app.ts`. This keeps routes testable and decoupled from the DI container.

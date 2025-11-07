@@ -1,94 +1,92 @@
-import { prisma } from "../utils/prismaClient";
+import { PrismaClient, Cafe, Employee } from '@prisma/client';
+import { injectable, inject } from 'inversify';
+import { ICafeService } from '../interfaces/ICafeService';
+import { TYPES } from '../types';
 
-export function getAllCafes() {
-  return prisma.cafe.findMany({
-    include: {
-      _count: {
-        select: {
-          employees: true
+@injectable()
+export class CafeService implements ICafeService {
+  constructor(@inject(TYPES.PrismaClient) private prisma: PrismaClient) {}
+
+  getAllCafes() {
+    return this.prisma.cafe.findMany({
+      include: {
+        _count: {
+          select: {
+            employees: true
+          }
+        },
+        employees: true
+      },
+      orderBy: {
+        employees: {
+          _count: 'desc'
+        }
+      }
+    });
+  }
+
+  getCafeById(id: string) {
+    return this.prisma.cafe.findUnique({
+      where: {
+        id
+      },
+      include: {
+        _count: {
+          select: {
+            employees: true
+          }
+        },
+        employees: true
+      }
+    });
+  }
+
+  getCafeByLocation(location: string) {
+    return this.prisma.cafe.findMany({
+      where: {
+        location: {
+          contains: location,
+          mode: 'insensitive'
         }
       },
-      employees: true
-    },
-    orderBy: {
-      employees: {
-        _count: 'desc'
-      }
-    }
-  });
-}
-
-export function getCafeById(id: string) {
-  return prisma.cafe.findUnique({
-    where: {
-      id
-    },
-    include: {
-      _count: {
-        select: {
-          employees: true
-        }
+      include: {
+        _count: {
+          select: {
+            employees: true
+          }
+        },
+        employees: true
       },
-      employees: true
-    }
-  });
-}
-
-export function getCafeByLocation(location: string) {
-  return prisma.cafe.findMany({
-    where: {
-      location: {
-        contains: location,
-        mode: 'insensitive'
-      }
-    },
-    include: {
-      _count: {
-        select: {
-          employees: true
+      orderBy: {
+        employees: {
+          _count: 'desc'
         }
-      },
-      employees: true
-    },
-    orderBy: {
-      employees: {
-        _count: 'desc'
       }
-    }
-  });
-}
+    });
+  }
 
-export function createCafe(data: {
-  name: string;
-  description: string;
-  location: string;
-  logo?: string;
-}) {
-  return prisma.cafe.create({
-    data,
-    include: {
-      employees: true
-    }
-  });
-}
+  createCafe(data: { name: string; description: string; location: string; logo?: string }) {
+    return this.prisma.cafe.create({
+      data,
+      include: {
+        employees: true
+      }
+    });
+  }
 
-export function updateCafe(id: string, data: {
-  name?: string;
-  description?: string;
-  location?: string;
-  logo?: string;
-}) {
-  return prisma.cafe.update({
-    where: { id },
-    data,
-    include: {
-      employees: true
-    }
-  });
-}
+  updateCafe(id: string, data: { name?: string; description?: string; location?: string; logo?: string }) {
+    return this.prisma.cafe.update({
+      where: { id },
+      data,
+      include: {
+        employees: true
+      }
+    });
+  }
 
-export function deleteCafe(id: string) {
-  return prisma.cafe.delete({
-    where: { id }
-  });
+  deleteCafe(id: string) {
+    return this.prisma.cafe.delete({
+      where: { id }
+    });
+  }
 }
