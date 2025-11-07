@@ -1,9 +1,9 @@
 import type { CreateEmployeeRequestBody, GetEmployeesRequestQuery, GetEmployeesResponse, GetEmployeeResponse, CreateEmployeeResponse, UpdateEmployeeResponse } from '@cafe-app/shared-types';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string
+const BASE_URL = '/api';
 
 export async function fetchEmployees(query: GetEmployeesRequestQuery): Promise<GetEmployeesResponse> {
-  const url = new URL(`${BASE_URL}/employees`);
+  const url = new URL(`${BASE_URL}/employees`, window.location.origin);
   if (query.cafe) {
     url.searchParams.append('cafe', query.cafe);
   }

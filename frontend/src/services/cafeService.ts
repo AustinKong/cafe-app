@@ -7,10 +7,10 @@ import type {
   UpdateCafeResponse,
 } from '@cafe-app/shared-types';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string
+const BASE_URL = '/api';
 
 export async function fetchCafes(query: GetCafesRequestQuery): Promise<GetCafesResponse> {
-  const url = new URL(`${BASE_URL}/cafes`);
+  const url = new URL(`${BASE_URL}/cafes`, window.location.origin);
   if (query.location) {
     url.searchParams.append('location', query.location);
   }

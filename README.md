@@ -41,23 +41,7 @@ A full-stack application for managing cafes and their employees. Built with Reac
    - `DATABASE_URL`: Your PostgreSQL connection string (e.g., `postgresql://username:password@localhost:5432/cafe_app?schema=public`)
    - `PORT`: Port for the backend server (default: 5000)
    - `DATA_PATH`: Path to store uploaded data (default: `./data`)
-   - `BASE_URL`: Base URL for the backend (default: `http://localhost:5000`)
    - `FRONTEND_URL`: URL of the frontend application (default: `http://localhost:5173`)
-
-### Frontend Environment Variables
-
-1. Navigate to the `frontend` directory:
-   ```bash
-   cd ../frontend
-   ```
-
-2. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. Edit `.env` and set the API base URL:
-   - `VITE_API_BASE_URL`: Base URL for the backend API (default: `http://localhost:5000/api`)
 
 ## Database Setup
 
