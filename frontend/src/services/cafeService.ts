@@ -7,7 +7,7 @@ import type {
   UpdateCafeResponse,
 } from '@cafe-app/shared-types';
 
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL as string
 
 export async function fetchCafes(query: GetCafesRequestQuery): Promise<GetCafesResponse> {
   const url = new URL(`${BASE_URL}/cafes`);

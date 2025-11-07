@@ -18,6 +18,8 @@ export async function getCafes(req: Request, res: Response) {
       cafes = await getAllCafes();
     }
 
+    console.log('Cafes from DB:', cafes);
+
     const response: GetCafesResponse = cafes.map((cafe) => ({
       id: cafe.id,
       name: cafe.name,
