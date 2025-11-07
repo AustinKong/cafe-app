@@ -39,7 +39,10 @@ export function getCafeById(id: string) {
 export function getCafeByLocation(location: string) {
   return prisma.cafe.findMany({
     where: {
-      location
+      location: {
+        contains: location,
+        mode: 'insensitive'
+      }
     },
     include: {
       _count: {
