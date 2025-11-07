@@ -3,8 +3,11 @@ import cors from "cors";
 import path from "path";
 import errorHandler from "./middleware/errorHandler";
 import logger from "./middleware/logger";
-import cafeRoutes from "./routes/cafeRoutes";
-import employeeRoutes from "./routes/employeeRoutes";
+import { createCafeRouter } from "./routes/cafeRoutes";
+import { createEmployeeRouter } from "./routes/employeeRoutes";
+import { container } from './container';
+import { CafeController } from './controllers/cafeController';
+import { EmployeeController } from './controllers/employeeController';
 
 const app = express();
 
@@ -19,8 +22,13 @@ app.use(express.static('public'));
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-app.use('/api/cafes', cafeRoutes);
-app.use('/api/employees', employeeRoutes);
+// Need to manually do DI because we are not using inversify-express-utils
+// Which would more tightly couple us to Inversify
+const cafeController = container.get(CafeController);
+const employeeController = container.get(EmployeeController);
+
+app.use('/api/cafes', createCafeRouter(cafeController));
+app.use('/api/employees', createEmployeeRouter(employeeController));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
