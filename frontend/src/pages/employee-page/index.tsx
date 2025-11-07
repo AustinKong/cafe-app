@@ -1,6 +1,6 @@
 import { Space, Typography, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchEmployees, deleteEmployee as deleteEmployeeSvc } from '../../services/employeeService';
 import type { EmployeeListItem } from '@cafe-app/shared-types';
@@ -9,6 +9,8 @@ import { EmployeeTable } from './EmployeeTable';
 const { Title } = Typography;
 
 export function EmployeePage() {
+  const [searchParams] = useSearchParams();
+  const cafeParam = searchParams.get('cafe') ?? '';
   const queryClient = useQueryClient();
 
   const { data: employees, isLoading } = useQuery<EmployeeListItem[]>({
@@ -31,7 +33,7 @@ export function EmployeePage() {
           <Button type="primary" icon={<PlusOutlined />}>Add New Employee</Button>
         </Link>
       </Space>
-      <EmployeeTable employees={employees ?? []} isLoading={isLoading || isDeleting} deleteEmployee={deleteEmployee} />
+      <EmployeeTable employees={employees ?? []} isLoading={isLoading || isDeleting} deleteEmployee={deleteEmployee} cafeFilter={cafeParam} />
     </Space>
   );
 }

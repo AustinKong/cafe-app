@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { type ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import type { EmployeeListItem } from '@cafe-app/shared-types';
@@ -10,11 +10,27 @@ export function EmployeeTable({
   employees,
   isLoading,
   deleteEmployee,
+  cafeFilter,
 }: {
   employees: EmployeeListItem[];
   isLoading: boolean;
   deleteEmployee: (id: string) => void;
+  cafeFilter?: string;
 }) {
+  const gridRef = useRef<AgGridReact>(null);
+
+  const onGridReady = (params: { api: { setFilterModel: (model: Record<string, unknown>) => void } }) => {
+    if (cafeFilter) {
+      // Preset cafe filter
+      params.api.setFilterModel({
+        cafe: {
+          type: 'equals',
+          filter: cafeFilter,
+          filterType: 'text',
+        },
+      });
+    }
+  };
   const [colDefs] = useState<ColDef<EmployeeListItem>[]>([
     { headerName: 'ID', field: 'id' },
     { headerName: 'Name', field: 'name', flex: 1 },
@@ -52,6 +68,7 @@ export function EmployeeTable({
   return (
     <div className="ag-theme-antd" style={{ height: 600, width: '100%' }}>
       <AgGridReact
+        ref={gridRef}
         rowData={employees}
         columnDefs={colDefs}
         defaultColDef={{
@@ -59,6 +76,7 @@ export function EmployeeTable({
           resizable: true,
           filter: true,
         }}
+        onGridReady={onGridReady}
         overlayLoadingTemplate={'<span class="ag-overlay-loading-center">Loading employees...</span>'}
         loading={isLoading}
         pagination={false}

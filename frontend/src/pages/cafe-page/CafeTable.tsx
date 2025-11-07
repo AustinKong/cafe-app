@@ -39,12 +39,12 @@ export function CafeTable({
     },
     { headerName: "Location", field: "location" },
     { headerName: "Employees", field: "employees",
-      cellRenderer: (params: { data: { id: string; }; value: number; }) => {
-        const cafeId = params.data.id;
+      cellRenderer: (params: { data: { name: string; }; value: number; }) => {
+        const cafeName = params.data.name;
         const employeeCount = params.value;
 
         return (
-          <Link to={`/employees?cafe=${cafeId}`}>
+          <Link to={`/employees?cafe=${cafeName}`}>
             {employeeCount}
           </Link>
         );
