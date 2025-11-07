@@ -78,21 +78,6 @@ This will start:
 - Backend server on `http://localhost:5000`
 - Frontend development server on `http://localhost:5173`
 
-## Building for Production
-
-### Backend
-```bash
-cd backend
-npm run build
-npm start
-```
-
-### Frontend
-```bash
-cd frontend
-npm run build
-npm run preview
-```
 
 ## Project Structure
 
