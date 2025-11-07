@@ -21,7 +21,7 @@ app.use(logger);
 const dataPath = process.env.DATA_PATH || path.join(__dirname, '../data');
 fs.mkdirSync(path.resolve(dataPath), { recursive: true });
 app.use('/data', express.static(path.resolve(dataPath)));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
@@ -34,7 +34,7 @@ app.use('/api/cafes', createCafeRouter(cafeController));
 app.use('/api/employees', createEmployeeRouter(employeeController));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.use(errorHandler);

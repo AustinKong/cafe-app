@@ -17,6 +17,7 @@ COPY . .
 
 RUN npm run prisma:generate --workspace=backend
 
+RUN npm run build --workspace=packages/shared-types
 RUN npm run build --workspace=frontend
 RUN npm run build --workspace=backend
 
