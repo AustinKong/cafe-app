@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
+import fs from "fs";
 import errorHandler from "./middleware/errorHandler";
 import logger from "./middleware/logger";
 import { createCafeRouter } from "./routes/cafeRoutes";
@@ -17,8 +18,10 @@ app.use(cors({
 app.use(express.json());
 app.use(logger);
 
-app.use('/data', express.static('data'));
-app.use(express.static('public'));
+const dataPath = process.env.DATA_PATH || path.join(__dirname, '../data');
+fs.mkdirSync(path.resolve(dataPath), { recursive: true });
+app.use('/data', express.static(path.resolve(dataPath)));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
