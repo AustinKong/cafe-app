@@ -11,6 +11,9 @@ export default defineConfig([
       tseslint.configs.stylisticTypeChecked,
 
     ],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+    },
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],

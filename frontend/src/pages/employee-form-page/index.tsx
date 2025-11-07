@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Button, DatePicker, Form, Input, Popconfirm, Radio, Select, Space, Spin, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchCafes } from '../../services/cafeService';
 import { createEmployee, fetchEmployeeById, updateEmployee } from '../../services/employeeService';
-import { type CafeListItem, type CreateEmployeeDto, type Employee } from '@cafe-app/shared-types';
+import { type CafeListItem, type CreateEmployeeRequestBody, type GetEmployeeResponse } from '@cafe-app/shared-types';
 import dayjs from 'dayjs';
 
 const { Title } = Typography;
@@ -25,7 +21,7 @@ export function EmployeeFormPage() {
     queryFn: () => fetchCafes({}),
   });
 
-  const { data: employee, isLoading: employeeIsLoading } = useQuery<Employee>({
+  const { data: employee, isLoading: employeeIsLoading } = useQuery<GetEmployeeResponse>({
     queryKey: ['employees', id],
     queryFn: async () => fetchEmployeeById(id ?? ''),
     enabled: isEdit,
@@ -47,7 +43,7 @@ export function EmployeeFormPage() {
   }, [employee, form]);
 
   const { mutate: saveEmployee, isPending } = useMutation({
-    mutationFn: (dto: CreateEmployeeDto) => {
+    mutationFn: (dto: CreateEmployeeRequestBody) => {
       if (isEdit && id) return updateEmployee(id, dto);
       return createEmployee(dto);
     },
@@ -58,7 +54,7 @@ export function EmployeeFormPage() {
     },
   });
 
-  const handleFinish = (values: CreateEmployeeDto) => {
+  const handleFinish = (values: CreateEmployeeRequestBody) => {
     saveEmployee(values);
   };
 

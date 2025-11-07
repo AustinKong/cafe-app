@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import { type Cafe, type CreateCafeDto } from "@cafe-app/shared-types";
+import { type CreateCafeRequestBody, type GetCafeResponse } from "@cafe-app/shared-types";
 import { Button, Flex, Form, Input, message, Popconfirm, Spin, Typography, Upload, type UploadFile, type UploadProps } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCafe, fetchCafeById, updateCafe } from "../../services/cafeService";
@@ -42,7 +38,7 @@ export function CafeFormPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
 
-  const { data: cafe, isLoading } = useQuery<Cafe>({
+  const { data: cafe, isLoading } = useQuery<GetCafeResponse>({
     queryKey: ["cafes", id],
     queryFn: () => fetchCafeById(id ?? ""),
     enabled: isEdit,
@@ -65,7 +61,7 @@ export function CafeFormPage() {
   }, [cafe, isEdit, form, initialLogo]);
 
   const { mutate: saveCafe, isPending } = useMutation({
-    mutationFn: (dto: CreateCafeDto & { logo?: File }) => {
+    mutationFn: (dto: CreateCafeRequestBody & { logo?: File }) => {
       if (isEdit && id) return updateCafe(id, dto);
       return createCafe(dto);
     },
@@ -76,7 +72,7 @@ export function CafeFormPage() {
     },
   });
 
-  const handleFinish = (values: CreateCafeDto & { logo?: UploadFile[] }) => {
+  const handleFinish = (values: CreateCafeRequestBody & { logo?: UploadFile[] }) => {
     const file = values.logo?.[0]?.originFileObj as File | undefined;
 
     if (file) {

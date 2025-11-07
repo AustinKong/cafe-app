@@ -17,7 +17,10 @@ export function getEmployeesByCafeName(cafeName: string) {
   return prisma.employee.findMany({
     where: {
       cafe: {
-        name: cafeName
+        name: {
+          contains: cafeName,
+          mode: 'insensitive'
+        }
       }
     },
     include: {

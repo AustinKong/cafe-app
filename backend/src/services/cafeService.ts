@@ -39,7 +39,10 @@ export function getCafeById(id: string) {
 export function getCafeByLocation(location: string) {
   return prisma.cafe.findMany({
     where: {
-      location
+      location: {
+        contains: location,
+        mode: 'insensitive'
+      }
     },
     include: {
       _count: {
@@ -64,7 +67,10 @@ export function createCafe(data: {
   logo?: string;
 }) {
   return prisma.cafe.create({
-    data
+    data,
+    include: {
+      employees: true
+    }
   });
 }
 
@@ -76,7 +82,10 @@ export function updateCafe(id: string, data: {
 }) {
   return prisma.cafe.update({
     where: { id },
-    data
+    data,
+    include: {
+      employees: true
+    }
   });
 }
 
