@@ -12,6 +12,8 @@ import { EmployeeController } from './controllers/employeeController';
 
 const app = express();
 
+app.set('trust proxy', true);
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
 }));
@@ -34,7 +36,7 @@ app.use('/api/cafes', createCafeRouter(cafeController));
 app.use('/api/employees', createEmployeeRouter(employeeController));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.use(errorHandler);
